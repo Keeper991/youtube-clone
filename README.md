@@ -1,3 +1,3 @@
-# Cloning Youtube (feat. NomadCoder)
+# Metube (feat. NomadCoder)
 
-Learning full-stack with NodeJS, Pug, es6, etc.
+Learn full-stack with cloning youtube using NodeJS, Pug, es6, etc.
