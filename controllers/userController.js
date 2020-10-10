@@ -17,9 +17,22 @@ export const join = (req, res) => {
     }
   }
 };
-export const login = (req, res) => res.render("login");
+
+export const login = (req, res) => {
+  if (req.method === "GET") {
+    res.render("login");
+  } else if (req.method === "POST") {
+    res.redirect(routes.home);
+  }
+};
+
 export const logout = (req, res) => res.render("Logout");
-export const users = (req, res) => res.render("Users");
-export const userDetail = (req, res) => res.render("User Detail");
-export const editProfile = (req, res) => res.render("Edit Profile");
-export const changePassword = (req, res) => res.render("Change Password");
+export const userDetail = (req, res) => {
+  res.render("userDetail", { pageTitle: "User Detail" });
+};
+export const editProfile = (req, res) => {
+  res.render("editProfile", { pageTitle: "Edit Profile" });
+};
+export const changePassword = (req, res) => {
+  res.render("changePassword", { pageTitle: "Change Password" });
+};
