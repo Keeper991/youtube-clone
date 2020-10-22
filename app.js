@@ -20,6 +20,7 @@ app.set("view engine", "pug");
 
 app.use(localsMiddleware);
 
+// This code is for playing sample video.
 app.use((req, res, next) => {
   res.setHeader(
     "Content-Security-Policy",
@@ -27,6 +28,9 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+// this code will be deleted after applying cloud service
+app.use("/uploads", express.static("uploads"));
 
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);

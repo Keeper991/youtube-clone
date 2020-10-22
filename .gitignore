@@ -117,3 +117,6 @@ dist
 
 # package-lock
 package-lock.json
+
+# static files from uploading
+uploads
