@@ -21,16 +21,17 @@ app.set("view engine", "pug");
 app.use(localsMiddleware);
 
 // This code is for playing sample video.
-app.use((req, res, next) => {
-  res.setHeader(
-    "Content-Security-Policy",
-    "script-src 'self' https://archive.org"
-  );
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader(
+//     "Content-Security-Policy",
+//     "script-src 'self' https://archive.org"
+//   );
+//   next();
+// });
 
 // this code will be deleted after applying cloud service
 app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("static"));
 
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);

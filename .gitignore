@@ -120,3 +120,4 @@ package-lock.json
 
 # static files from uploading
 uploads
+static
