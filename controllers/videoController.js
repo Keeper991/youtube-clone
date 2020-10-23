@@ -9,11 +9,19 @@ export const home = async (req, res) => {
     res.render("home", { pageTitle: "Home", videos: [] });
   }
 };
-export const search = (req, res) => {
+export const search = async (req, res) => {
   const {
     query: { term: searchingFor },
   } = req;
-  res.render("search", { pageTitle: "Search", searchingFor });
+  let videos = [];
+  try {
+    videos = await Video.find({
+      title: { $regex: searchingFor, $options: "i" },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  res.render("search", { pageTitle: "Search", searchingFor, videos });
 };
 export const upload = async (req, res) => {
   if (req.method === "GET") {
