@@ -13,7 +13,7 @@ export const search = (req, res) => {
   const {
     query: { term: searchingFor },
   } = req;
-  res.render("search", { pageTitle: "Search", searchingFor, videos });
+  res.render("search", { pageTitle: "Search", searchingFor });
 };
 export const upload = async (req, res) => {
   if (req.method === "GET") {
@@ -28,7 +28,7 @@ export const upload = async (req, res) => {
       title,
       description,
     });
-    res.redirect(routes.videoDetail(newVideo._id));
+    res.redirect(routes.videoDetail(newVideo.id));
   }
 };
 export const videoDetail = async (req, res) => {
@@ -63,6 +63,7 @@ export const editVideo = async (req, res) => {
       res.redirect(routes.videoDetail(id));
     } catch (error) {
       res.redirect(routes.home);
+      res.video();
     }
   }
 };
@@ -72,6 +73,8 @@ export const deleteVideo = async (req, res) => {
   } = req;
   try {
     await Video.findOneAndRemove({ _id: id });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
   res.redirect(routes.home);
 };
