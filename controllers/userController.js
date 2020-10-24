@@ -28,16 +28,8 @@ export const join = async (req, res, next) => {
   }
 };
 
-export const login = (req, res) => {
-  if (req.method === "GET") {
-    res.render("login", { pageTitle: "Log In" });
-  } else if (req.method === "POST") {
-    return passport.authenticate("local", {
-      failureRedirect: routes.login,
-      successRedirect: routes.home,
-    });
-  }
-};
+export const getLogin = (req, res) =>
+  res.render("login", { pageTitle: "Log In" });
 
 export const postLogin = passport.authenticate("local", {
   failureRedirect: routes.login,
