@@ -38,6 +38,12 @@ app.use(passport.session());
 
 app.use(localsMiddleware);
 
+// CSP header
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "img 'self' data:");
+  next();
+});
+
 // this code will be deleted after applying cloud service
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("static"));

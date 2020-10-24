@@ -1,7 +1,7 @@
 import passport from "passport";
+import request from "request-promise-native";
 import routes from "../routes";
 import User from "../models/User";
-import request from "request-promise-native";
 
 export const join = async (req, res, next) => {
   if (req.method === "GET") {
@@ -50,7 +50,7 @@ export const githubLoginCallback = async (
   cb
 ) => {
   const {
-    _json: { id, avatar_url, name },
+    _json: { id, avatar_url: avatarUrl, name },
   } = profile;
 
   const opt = {
@@ -70,6 +70,7 @@ export const githubLoginCallback = async (
       const user = await User.findOne({ email });
       if (user) {
         user.githubId = id;
+        user.avatarUrl = avatarUrl;
         user.save();
         return cb(null, user);
       }
@@ -77,8 +78,9 @@ export const githubLoginCallback = async (
         email,
         name,
         githubId: id,
-        avatarUrl: avatar_url,
+        avatarUrl,
       });
+      console.log(newUser);
       return cb(null, newUser);
     } catch (error) {
       return cb(error);
@@ -92,8 +94,21 @@ export const logout = (req, res) => {
   req.logout();
   res.redirect(routes.home);
 };
-export const userDetail = (req, res) => {
-  res.render("userDetail", { pageTitle: "User Detail" });
+
+export const getMe = (req, res) => {
+  res.render("userDetail", { pageTitle: "User Detail", user: req.user });
+};
+
+export const userDetail = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    const user = User.findById(id);
+    res.render("userDetail", { pageTitle: "User Detail", user });
+  } catch (error) {
+    res.redirect(routes.home);
+  }
 };
 export const editProfile = (req, res) => {
   res.render("editProfile", { pageTitle: "Edit Profile" });
