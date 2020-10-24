@@ -1,6 +1,7 @@
 import passport from "passport";
 import routes from "../routes";
 import User from "../models/User";
+import request from "request-promise-native";
 
 export const join = async (req, res, next) => {
   if (req.method === "GET") {
@@ -36,7 +37,59 @@ export const postLogin = passport.authenticate("local", {
   successRedirect: routes.home,
 });
 
+export const getGithubLogin = passport.authenticate("github");
+
+export const postGithubLogin = (req, res) => {
+  res.redirect(routes.home);
+};
+
+export const githubLoginCallback = async (
+  accessToken,
+  refreshToken,
+  profile,
+  cb
+) => {
+  const {
+    _json: { id, avatar_url, name },
+  } = profile;
+
+  const opt = {
+    url: "https://api.github.com/user/emails",
+    json: true,
+    headers: {
+      "User-Agent": "Request-Promise",
+      Authorization: `token ${accessToken}`,
+    },
+  };
+
+  try {
+    const res = await request(opt);
+    const { email } = res[0];
+
+    try {
+      const user = await User.findOne({ email });
+      if (user) {
+        user.githubId = id;
+        user.save();
+        return cb(null, user);
+      }
+      const newUser = await User.create({
+        email,
+        name,
+        githubId: id,
+        avatarUrl: avatar_url,
+      });
+      return cb(null, newUser);
+    } catch (error) {
+      return cb(error);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const logout = (req, res) => {
+  req.logout();
   res.redirect(routes.home);
 };
 export const userDetail = (req, res) => {
