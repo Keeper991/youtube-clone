@@ -27,7 +27,9 @@ passport.use(
       clientID: process.env.FB_ID,
       clientSecret: process.env.FB_SECRET,
       // this callbackURL should change whenever you restart ngrok..
-      callbackURL: `https://2a928ffea594.ngrok.io${routes.facebookCallback}`,
+      callbackURL: process.env.PRODUCTION
+        ? `https://radiant-hollows-22783.herokuapp.com${routes.facebookCallback}`
+        : `https://2a928ffea594.ngrok.io${routes.facebookCallback}`,
       profileFields: ["id", "displayName", "photos", "email"],
     },
     facebookLoginCallback
