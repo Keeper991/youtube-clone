@@ -149,8 +149,26 @@ export const userDetail = async (req, res) => {
     res.redirect(routes.home);
   }
 };
-export const editProfile = (req, res) => {
-  res.render("editProfile", { pageTitle: "Edit Profile" });
+
+export const editProfile = async (req, res) => {
+  if (req.method === "GET") {
+    res.render("editProfile", { pageTitle: "Edit Profile" });
+  } else if (req.method === "POST") {
+    const {
+      body: { name, email },
+      file,
+    } = req;
+    try {
+      await User.findByIdAndUpdate(req.user.id, {
+        name,
+        email,
+        avatarUrl: file ? file.path : req.user.avatarUrl,
+      });
+      res.redirect(routes.me);
+    } catch (error) {
+      res.render("editProfile", { pageTitle: "Edit Profile" });
+    }
+  }
 };
 export const changePassword = (req, res) => {
   res.render("changePassword", { pageTitle: "Change Password" });

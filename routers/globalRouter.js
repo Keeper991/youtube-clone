@@ -44,6 +44,6 @@ globalRouter.get(
 globalRouter.get(routes.logout, onlyPrivate, logout);
 globalRouter.get(routes.search, search);
 
-globalRouter.get(routes.me, getMe);
+globalRouter.get(routes.me, onlyPrivate, getMe);
 
 export default globalRouter;
