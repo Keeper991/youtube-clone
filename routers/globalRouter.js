@@ -7,7 +7,9 @@ import {
   postLogin,
   getGithubLogin,
   postGithubLogin,
+  getFacebookLogin,
   getMe,
+  postFacebookLogin,
 } from "../controllers/userController";
 import { home, search } from "../controllers/videoController";
 import { onlyPrivate, onlyPublic } from "../middlewares";
@@ -28,6 +30,15 @@ globalRouter.get(
   routes.githubCallback,
   passport.authenticate("github", { failureRedirect: "/login" }),
   postGithubLogin
+);
+
+globalRouter.get(routes.facebook, onlyPublic, getFacebookLogin);
+globalRouter.get(
+  routes.facebookCallback,
+  passport.authenticate("facebook", {
+    failureRedirect: "/login",
+  }),
+  postFacebookLogin
 );
 
 globalRouter.get(routes.logout, onlyPrivate, logout);
