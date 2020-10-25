@@ -10,6 +10,8 @@ const totalTime = document.getElementById("totalTime");
 const volumeRange = document.getElementById("jsVolume");
 const progressBar = document.getElementById("jsProgressBar");
 
+let totalDuration;
+
 const registerView = () => {
   const videoId = window.location.href.split("/videos/")[1];
   fetch(`/api/${videoId}/view`, {
@@ -91,11 +93,21 @@ const setCurrentTime = () => {
   currentTime.innerHTML = formatDate(Math.floor(videoPlayer.currentTime));
 };
 
+const handleProgressBarDrag = (event) => {
+  const {
+    target: { value },
+  } = event;
+  videoPlayer.currentTime = totalDuration * value;
+};
+
 const setTotalTime = async () => {
+  console.log(videoPlayer.src);
   const blob = await fetch(videoPlayer.src).then((response) => response.blob());
-  const duration = await getBlobDuration(blob);
-  const totalTimeString = formatDate(duration);
+  totalDuration = await getBlobDuration(blob);
+  const totalTimeString = formatDate(totalDuration);
   totalTime.innerHTML = totalTimeString;
+
+  progressBar.addEventListener("input", handleProgressBarDrag);
 };
 
 const handleKeyDown = (e) => {
@@ -125,15 +137,8 @@ const handleVolumeDrag = (event) => {
   }
 };
 
-const handleProgressBarDrag = (event) => {
-  const {
-    target: { value },
-  } = event;
-  videoPlayer.currentTime = videoPlayer.duration * value;
-};
-
 const setProgressBar = () => {
-  progressBar.value = videoPlayer.currentTime / videoPlayer.duration;
+  progressBar.value = videoPlayer.currentTime / totalDuration;
 };
 
 const init = () => {
@@ -148,7 +153,6 @@ const init = () => {
   window.addEventListener("keydown", handleKeyDown);
   videoPlayer.addEventListener("ended", handleEnded);
   volumeRange.addEventListener("input", handleVolumeDrag);
-  progressBar.addEventListener("input", handleProgressBarDrag);
 };
 
 if (videoContainer) {
