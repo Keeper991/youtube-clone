@@ -6,6 +6,7 @@ const fullScrnBtn = document.getElementById("jsFullScreen");
 const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
 const volumeRange = document.getElementById("jsVolume");
+const progressBar = document.getElementById("jsProgressBar");
 
 const handlePlayClick = () => {
   if (videoPlayer.paused) {
@@ -92,12 +93,13 @@ const handleKeyDown = (e) => {
   }
 };
 
-function handleEnded() {
+const handleEnded = () => {
   videoPlayer.currentTime = 0;
+  progressBar.value = 0;
   playBtn.innerHTML = '<i class="fas fa-play"></i>';
-}
+};
 
-function handleDrag(event) {
+const handleVolumeDrag = (event) => {
   const {
     target: { value },
   } = event;
@@ -109,7 +111,18 @@ function handleDrag(event) {
   } else {
     volumeBtn.innerHTML = '<i class="fas fa-volume-off"></i>';
   }
-}
+};
+
+const handleProgressBarDrag = (event) => {
+  const {
+    target: { value },
+  } = event;
+  videoPlayer.currentTime = videoPlayer.duration * value;
+};
+
+const setProgressBar = () => {
+  progressBar.value = videoPlayer.currentTime / videoPlayer.duration;
+};
 
 const init = () => {
   videoPlayer.volume = 0.5;
@@ -119,9 +132,11 @@ const init = () => {
   videoPlayer.load();
   videoPlayer.addEventListener("loadedmetadata", setTotalTime);
   videoPlayer.addEventListener("timeupdate", setCurrentTime);
+  videoPlayer.addEventListener("timeupdate", setProgressBar);
   window.addEventListener("keydown", handleKeyDown);
   videoPlayer.addEventListener("ended", handleEnded);
-  volumeRange.addEventListener("input", handleDrag);
+  volumeRange.addEventListener("input", handleVolumeDrag);
+  progressBar.addEventListener("input", handleProgressBarDrag);
 };
 
 if (videoContainer) {
