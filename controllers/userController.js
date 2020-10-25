@@ -19,7 +19,7 @@ export const join = async (req, res, next) => {
         if (user) {
           user.name = name;
           await user.setPassword(password);
-          user.save();
+          await user.save();
         } else {
           const newUser = await User({
             name,
@@ -78,7 +78,7 @@ export const githubLoginCallback = async (
       if (user) {
         user.githubId = id;
         user.avatarUrl = avatarUrl;
-        user.save();
+        await user.save();
         return cb(null, user);
       }
       const newUser = await User.create({
@@ -116,7 +116,7 @@ export const facebookLoginCallback = async (
     if (user) {
       user.facebookId = id;
       user.avatarUrl = avatarUrl;
-      user.save();
+      await user.save();
       return cb(null, user);
     }
     const newUser = await User.create({
@@ -150,7 +150,7 @@ export const userDetail = async (req, res) => {
     params: { id },
   } = req;
   try {
-    const user = User.findById(id);
+    const user = await User.findById(id);
     res.render("userDetail", { pageTitle: "User Detail", user });
   } catch (error) {
     res.redirect(routes.home);
