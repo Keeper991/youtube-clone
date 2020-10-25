@@ -31,6 +31,7 @@ const handleVolumeClick = () => {
 
 const exitFullScreen = () => {
   fullScrnBtn.innerHTML = '<i class="fas fa-expand"></i>';
+  // eslint-disable-next-line no-use-before-define
   fullScrnBtn.addEventListener("click", goFullScreen);
   if (document.exitFullscreen) {
     document.exitFullscreen();
