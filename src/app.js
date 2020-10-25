@@ -42,10 +42,10 @@ app.use(passport.session());
 app.use(localsMiddleware);
 
 // // CSP header
-// app.use((req, res, next) => {
-//   res.setHeader("Content-Security-Policy", "img 'self' data:");
-//   next();
-// });
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "img 'self' data:");
+  next();
+});
 
 app.use("/static", express.static(path.join(__dirname, "static")));
 
