@@ -3,5 +3,5 @@ include mixins/videoBlock
 
 block content
     .home-videos
-        each v in videos
+        each v in videos.reverse()
             +videoBlock(v)

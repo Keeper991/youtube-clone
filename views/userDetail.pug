@@ -13,5 +13,5 @@ block content
                 a(href=`/users${routes.changePassword}`)
                     button 🔒 Change Password 
         .home-videos
-            each v in user.videos
+            each v in user.videos.reverse()
                 +videoBlock(v)
