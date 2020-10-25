@@ -55,6 +55,7 @@ export const githubLoginCallback = async (
   refreshToken,
   profile,
   cb
+  // eslint-disable-next-line consistent-return
 ) => {
   const {
     _json: { id, avatar_url: avatarUrl, name },

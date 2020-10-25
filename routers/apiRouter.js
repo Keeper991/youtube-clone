@@ -1,6 +1,5 @@
 import express from "express";
 import routes from "../routes";
-import { onlyPrivate } from "../middlewares";
 import {
   addComment,
   delComment,

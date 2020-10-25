@@ -30,10 +30,10 @@ export const upload = async (req, res) => {
   } else if (req.method === "POST") {
     const {
       body: { title, description },
-      file: { path },
+      file: { location },
     } = req;
     const newVideo = await Video.create({
-      fileUrl: path,
+      fileUrl: location,
       title,
       description,
       creator: req.user.id,
@@ -157,8 +157,9 @@ export const delComment = async (req, res) => {
     const video = await Video.findById(id).populate("comments");
     const { comments: videoComments } = video;
     let commentId;
-    for (let i = 0; i < videoComments.length; i++) {
+    for (let i = 0; i < videoComments.length; i += 1) {
       if (videoComments[i].text === comment) {
+        // eslint-disable-next-line no-underscore-dangle
         commentId = videoComments[i]._id;
         videoComments.splice(i, 1);
         break;
