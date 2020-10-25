@@ -1,3 +1,6 @@
+/* eslint-disable import/first */
+// eslint-disable-next-line import/no-extraneous-dependencies
+import "@babel/polyfill";
 import "./db";
 import dotenv from "dotenv";
 import app from "./app";

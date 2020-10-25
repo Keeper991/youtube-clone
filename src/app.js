@@ -5,6 +5,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import passport from "passport";
 import session from "express-session";
+import path from "path";
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import routes from "./routes";
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 app.use(
   session({
@@ -39,15 +41,13 @@ app.use(passport.session());
 
 app.use(localsMiddleware);
 
-// CSP header
-app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "img 'self' data:");
-  next();
-});
+// // CSP header
+// app.use((req, res, next) => {
+//   res.setHeader("Content-Security-Policy", "img 'self' data:");
+//   next();
+// });
 
-// this code will be deleted after applying cloud service
-app.use("/uploads", express.static("uploads"));
-app.use("/static", express.static("static"));
+app.use("/static", express.static(path.join(__dirname, "static")));
 
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
