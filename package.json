@@ -12,12 +12,13 @@
     "build": "npm run build:server && npm run build:assets && npm run copyAll",
     "prebuild": "rm -rf build",
     "ngrok": "ngrok http 4000",
-    "start": "node build/init.js",
+    "start": "PRODUCTION=true node build/init.js",
     "prestart": "npm run build"
   },
   "author": "Keeper991",
   "license": "ISC",
   "dependencies": {
+    "@babel/cli": "^7.12.1",
     "@babel/core": "^7.11.6",
     "@babel/node": "^7.10.5",
     "@babel/preset-env": "^7.11.5",
@@ -45,7 +46,6 @@
     "request-promise-native": "^1.0.9"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.1",
     "@babel/polyfill": "^7.12.1",
     "autoprefixer": "^10.0.1",
     "babel-loader": "^8.1.0",
