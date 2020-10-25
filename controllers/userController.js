@@ -15,11 +15,18 @@ export const join = async (req, res, next) => {
       res.render("join", { pageTitle: "Join" });
     } else {
       try {
-        const user = await User({
-          name,
-          email,
-        });
-        await User.register(user, password);
+        const user = await User.findOne({ email });
+        if (user) {
+          user.name = name;
+          await user.setPassword(password);
+          user.save();
+        } else {
+          const newUser = await User({
+            name,
+            email,
+          });
+          await User.register(newUser, password);
+        }
         next();
       } catch (error) {
         console.log(error);
@@ -166,10 +173,31 @@ export const editProfile = async (req, res) => {
       });
       res.redirect(routes.me);
     } catch (error) {
-      res.render("editProfile", { pageTitle: "Edit Profile" });
+      res.redirect(routes.editProfile);
     }
   }
 };
-export const changePassword = (req, res) => {
-  res.render("changePassword", { pageTitle: "Change Password" });
+export const changePassword = async (req, res) => {
+  if (req.method === "GET") {
+    res.render("changePassword", { pageTitle: "Change Password" });
+  } else if (req.method === "POST") {
+    const {
+      body: { oldPassword, newPassword, newPassword2 },
+    } = req;
+    console.log(newPassword, newPassword2);
+    if (newPassword !== newPassword2) {
+      res
+        .status(400)
+        .render("changePassword", { pageTitle: "Change Password" });
+    } else {
+      try {
+        await req.user.changePassword(oldPassword, newPassword);
+        res.redirect(routes.me);
+      } catch (error) {
+        res
+          .status(400)
+          .render("changePassword", { pageTitle: "Change Password" });
+      }
+    }
+  }
 };
